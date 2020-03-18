@@ -1,9 +1,8 @@
 package com.v1.learn.Controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class IndexController {
@@ -11,4 +10,7 @@ public class IndexController {
     public String index(){
         return "index";
     }
+
+    @PostMapping("/SignToIndex")
+    public String SignToIndex() {return "index";}
 }
