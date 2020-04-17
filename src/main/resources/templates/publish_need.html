@@ -1,0 +1,34 @@
+
+    <div class="container" xmlns:th="http://www.thymeleaf.org">
+        <form class="form-signin" action="/createClass" method="post" enctype="multipart/form-data">
+            <div class="input-group l1">
+                <span class="input-group-addon" id="exp_name">实验名称</span>
+                <input name="eName" id="inputclassId" type="text" class="form-control" placeholder="6位数字"
+                       aria-describedby="basic-addon1" required autofocus>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5" id="sandbox-container">
+                    <div class="input-group l2">
+                        <span class="input-group-addon" id="start_time">开始时间</span>
+                        <input autocomplete="off" type="text" name="sTime" style="width: 218px;" class="form-control" placeholder="选择实验开始时间" data-provide="datepicker">
+                    </div>
+
+                    <div class="input-group l2">
+                        <span class="input-group-addon" id="deadline">截止时间</span>
+                        <input autocomplete="off" type="text" name="deadline" style="width: 218px;" class="form-control" placeholder="选择实验截止时间" data-provide="datepicker">
+                    </div>
+
+                </div>
+            </div>
+
+            <h1 th:inlines="text">文件上传</h1>
+                <p>选择文件: <input type="file" name="fileName"/></p>
+
+
+
+            <button style="width: 300px;margin:0 auto;" class="btn btn-lg btn-primary btn-block" formaction="/createExp" formmethod="post" type="submit">
+                发布实验
+            </button>
+        </form>
+    </div>

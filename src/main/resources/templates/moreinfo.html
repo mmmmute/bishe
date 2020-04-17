@@ -1,0 +1,62 @@
+
+
+
+<h1 xmlns:th="http://www.thymeleaf.org" th:text="${result.getEXPERIMENT_NAME()}" class="page-header">Dashboard</h1>
+<p id="toController" style="display:none;">more</p>
+<div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+    <table class="table table-striped" id="table">
+        <thead>
+        <tr>
+            <th>发布时间</th>
+            <th>开始时间</th>
+            <th>截止时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr >
+            <td th:text="${result.getpTime()}">1,001</td>
+            <td th:text="${result.getsTime()}">1,001</td>
+            <td th:text="${result.getDeadline()}">1,001</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="sub-header">实验资源</h2>
+<div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td>
+                <a th:href="@{'/download/'+${result.getFile()}}" methods="GET" th:text="${result.getFile()}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="sub-header">我的提交</h2>
+<div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td>文件</td>
+            <td>提交时间</td>
+            <td>
+                <form action="/s_submit" method="post" enctype="multipart/form-data">
+                    <p>选择文件: <input type="file" name="fileName"/></p>
+                    <p name="ID" th:text="${ID}" style="display: none"></p>
+                    <button style="width: 100px;height:25px;padding:3px;margin:0 auto; font-size: 14px" class="btn btn-default" type="submit">提交</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${record.getSign()}">
+            <td th:text="${record.getFILE()}">1,001</td>
+            <td th:text="${record.getTrans()}">1,001</td>
+        </tr>
+        <tr th:unless="${record.getSign()}">
+            <td>无</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

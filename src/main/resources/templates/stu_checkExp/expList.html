@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
@@ -26,8 +28,7 @@
     <link href="bootstrap-3.3.7/docs/examples/dashboard/dashboard.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]>
-    <script src="bootstrap-3.3.7/docs/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="bootstrap-3.3.7/docs/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="bootstrap-3.3.7/docs/assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -37,19 +38,45 @@
     <![endif]-->
 </head>
 
+<script>
+    $(function(){
+        $("#table").on("click", ":button", function(event){
+            let classId = $(this).closest("tr").find("td").eq(5).text();
+            let url = $('#toController').html();
+            console.log(url);
+            $.ajax({
+                type: "POST",
+                url: "/" + $('#toController').html(),
+                data:{
+                    "classId":classId
+                },
+                cache: false,
+                async: true,
+                success: function (data) {
+                    $("#change").html(data);
+                },
+                error: function (data) {
+                    alert("错误！");
+                }
+            });
+        });
+    });
+
+</script>
+
+
 <body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" th:text="${session.name}" href="#">教师名字</a>
+            <a class="navbar-brand" th:text="${session.name}" href="#">学生名字</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -70,9 +97,9 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">创建班级</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
+                <li><a href="#">搜索班级</a></li>
+                <li><a href="/sMyClass">我的课程</a></li>
+                <li><a href="">查看成绩</a></li>
             </ul>
             <ul class="nav nav-sidebar">
                 <li><a href="">Nav item</a></li>
@@ -87,21 +114,60 @@
                 <li><a href="">Another nav item</a></li>
             </ul>
         </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="change">
+            <h2 class="sub-header">已提交的实验</h2>
+            <div class="table-responsive">
+                <table class="table table-striped" id="table">
+                    <thead>
+                    <tr>
+                        <th>实验名称</th>
+                        <th>发布时间</th>
+                        <th>开始时间</th>
+                        <th>截止时间</th>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div style="width: 400px; height: 200px;margin:0 auto;text-align:center; line-height:200px">
-                <img src="picture/Yes.png">
-                <h2 style="display: inline;">创建成功</h2>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="exp : ${hadsubmit}">
+                        <td th:text="${exp.getEXPERIMENT_NAME()}">1,001</td>
+                        <td th:text="${exp.getpTime()}">1,001</td>
+                        <td th:text="${exp.getsTime()}">1,001</td>
+                        <td th:text="${exp.getDeadline()}">Lorem</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <h2 class="sub-header">未提交的实验</h2>
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                    <tr>
+                        <th>实验名称</th>
+                        <th>发布时间</th>
+                        <th>开始时间</th>
+                        <th>截止时间</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="exp : ${unsubmit}">
+                        <td th:text="${exp.getEXPERIMENT_NAME()}">1,001</td>
+                        <td th:text="${exp.getpTime()}">1,001</td>
+                        <td th:text="${exp.getsTime()}">1,001</td>
+                        <td th:text="${exp.getDeadline()}">Lorem</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
 </div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="bootstrap-3.3.7/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="bootstrap-3.3.7/docs/dist/js/bootstrap.min.js"></script>
 <!-- Just to make our placeholder images work. Don't actually copy the next line! -->

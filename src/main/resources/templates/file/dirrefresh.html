@@ -1,0 +1,43 @@
+<h1 class="page-header">文件暂存系统</h1>
+
+<form action="/fileUpload" method="post" enctype="multipart/form-data">
+    <input onchange="F_SUBMIT()" name="fileName" type="file" id="btn_file" style="display:none" multiple>
+    <input type="submit" id="file_sub" onchange="refresh()" style="display: none"/>
+</form>
+
+<a href="/secondRefresh" id="help" style="display: none" methods="post">--</a>
+
+<nav class="navbar navbar-default" style="width: 85%;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand path" href="#">根目录</a>
+            <div class="path_parent" th:each="el:${pathlist}" style="display: inline-block">
+                <span class="navbar-brand">>></span><a style="display: inline-block"
+                                                       class="navbar-brand path" href="#"
+                                                       th:text="${el}"></a>
+            </div>
+        </div>
+
+        <div style="float: right" class="navbar-header">
+                        <span class="glyphicon glyphicon-cloud-upload navbar-brand" type="button"
+                              onclick="F_Open_dialog()"></span>
+        </div>
+
+    </div>
+</nav>
+
+<div id="refresh">
+    <div th:each="file:${filelist}">
+        <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span th:if="${file.indexOf('.')==-1}" class="glyphicon glyphicon-folder-close
+"></span> <span th:if="${file.indexOf('.')!=-1}" class="glyphicon glyphicon-file"></span> <a class="file"
+                                                                                             th:if="${file.indexOf('.')!=-1}"
+                                                                                             th:href="@{'/fileManager/'+${file}}"
+                                                                                             th:text="${file}"
+                                                                                             methods="get"></a>
+            <a th:if="${file.indexOf('.')==-1}" th:href="@{'/filedir/'+${file}}" th:text="${file}"
+               methods="get"></a>
+        </p>
+    </div>
+</div>
+

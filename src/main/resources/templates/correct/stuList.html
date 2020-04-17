@@ -1,0 +1,167 @@
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" th:text="${session.name}" href="#">教师名字</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="/toCreateClass">创建班级</a></li>
+                <li><a href="/t_myClass">查看我管理的班级</a></li>
+                <li><a href="/publish_exp">发布实验</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="change">
+            <table id="example" class="table table-bordered tab-content"></table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../bootstrap-3.3.7/docs/dist/js/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../bootstrap-3.3.7/docs/assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../bootstrap-3.3.7/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+s<script>
+    $(function () {
+        init();
+    })
+
+    function init() {
+        window.operateEvents = {
+            'click #b1': function (e,value,row,index) {
+                let ID = row.ID;
+                let studentId = row.STUDENT_ID;
+                let grade = prompt("请输入成绩","");
+                while(grade==null){
+                    //输出word的格式
+                    alert("需要输入数字");
+                    grade = prompt("请输入成绩","");
+                }
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/SignGra",
+                    data:{
+                        "ID":ID,
+                        "grade":grade,
+                        "studentId":studentId
+                    },
+                    cache: false,
+                    async: true,
+                    success: function (data) {
+                    },
+                    error: function (data) {
+                        alert("错误！");
+                    }
+                });
+                row.grade = grade;
+                $("#example").bootstrapTable('refresh');
+            }
+        };
+
+        $('#example').bootstrapTable({
+            url: '/GradeDate',
+            method: 'get',
+            striped: true,
+            sidePagination: "true",
+            striped: true, // 是否显示行间隔色
+            pageSize: "5",
+            pagination: true, // 是否分页
+            search: false,
+            //得到查询的参数
+            queryParams : function (params) {
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    //field: 'Number',//可不加
+                    title: '序号',//标题  可不加
+                    align: "center",
+                    width: 40,
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    field: 'STUDENT_ID',
+                    title: '学生学号'
+                },
+                {
+                    field: 'STUDENT_NAME',
+                    title: '学生姓名'
+                },
+                {
+                    field: 'GRADE',
+                    title: '实验分数'
+                },
+                {
+                    title: '操作',
+                    width: '240px',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: actionFormatter,
+                    events: operateEvents
+                },
+                {
+                    field: 'ID',
+                    title: 'ID',
+                    visible:false
+                }
+            ]
+        });
+
+        function actionFormatter(value,row,index) {
+                return [
+                    '<button id="b1" type="button" class="btn btn-default" style="display: inline-block">批改成绩</button>'
+                ].join('');
+        }
+
+
+    }
+</script>

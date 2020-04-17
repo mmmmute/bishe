@@ -1,0 +1,20 @@
+
+    <h2 class="sub-header">未提交名单</h2>
+    <div class="table-responsive">
+        <table class="table table-striped" id="table">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th>名称</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${sList}">
+                <!--/*@thymesVar id="STUDENT_ID" type="com.v1.learn.dto.Student"*/-->
+                <td th:text="${student.STUDENT_ID}">1,001</td>
+                <!--/*@thymesVar id="NAME" type="com.v1.learn.dto.Student"*/-->
+                <td th:text="${student.NAME}">1,001</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>

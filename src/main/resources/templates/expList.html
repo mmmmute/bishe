@@ -1,0 +1,57 @@
+
+<script>
+    $(function(){
+        $("#table").on("click", ":button", function(event){
+            let ID = $(this).closest("tr").find("td").eq(1).text();
+            let url = $('#toController').html();
+            $.ajax({
+                type: "POST",
+                url: "/" + $('#toController').html(),
+                data:{
+                    "ID":ID
+                },
+                cache: false,
+                async: true,
+                success: function (data) {
+                    $("#change").html(data);
+                },
+                error: function (data) {
+                    alert("错误！");
+                }
+            });
+        });
+    });
+
+</script>
+
+    <h2  xmlns:th="http://www.thymeleaf.org" class="sub-header" th:text="${className}">课程实验</h2>
+    <p id="toController" style="display:none;">more</p>
+    <div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+        <table class="table table-striped" id="table">
+            <thead>
+            <tr>
+                <th>课程Id</th>
+                <th style="display: none">ID</th>
+                <th>课程名称</th>
+                <th>发布时间</th>
+                <th>开始时间</th>
+                <th>截止时间</th>
+                <th>提交状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exp : ${expList}">
+                <td th:text="${exp.getCLASS_ID()}">1,001</td>
+                <td style="display: none" th:text="${exp.getID()}">1,001</td>
+                <td th:text="${exp.getEXPERIMENT_NAME()}">1,001</td>
+                <td th:text="${exp.getpTime()}">1,001</td>
+                <td th:text="${exp.getsTime()}">1,001</td>
+                <td th:text="${exp.getDeadline()}">1,001</td>
+                <td th:text="${exp.getStatus()}">1,001</td>
+                <td style="height: 25px;">
+                    <button style="width: 100px;height:25px;padding:3px;margin:0 auto; font-size: 14px" class="btn btn-default" type="button">查看详细信息</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>

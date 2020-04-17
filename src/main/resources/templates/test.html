@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="../3.3.1-2/jquery.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css">
+    <script src="../js/bootstrap.min.js"></script>
+
+    <link rel="icon" href="../bootstrap-3.3.7/docs/favicon.ico">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../bootstrap-3.3.7/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../bootstrap-3.3.7/docs/examples/dashboard/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../bootstrap-3.3.7/docs/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../bootstrap-3.3.7/docs/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<script>
+    $(function () {
+        $("#table").on("click", ":button", function (event) {
+            let classId = $(this).closest("tr").find("td").eq(0).text();
+            let url = $('#toController').html();
+            console.log(url);
+            $.ajax({
+                type: "POST",
+                url: "/" + $('#toController').html(),
+                data: {
+                    "classId": classId
+                },
+                cache: false,
+                async: true,
+                success: function (data) {
+                    $("#change").html(data);
+                },
+                error: function (data) {
+                    alert("错误！");
+                }
+            });
+        });
+    });
+
+</script>
+
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" th:text="${session.name}" href="#">学生名字</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">搜索班级</a></li>
+                <li><a href="/sMyClass">我的课程</a></li>
+                <li><a href="">查看成绩</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="change">
+            <h1 xmlns:th="http://www.thymeleaf.org" th:text="${result.getEXPERIMENT_NAME()}" class="page-header">
+                Dashboard</h1>
+            <p id="toController" style="display:none;">more</p>
+            <div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+                <table class="table table-striped" id="table">
+                    <thead>
+                    <tr>
+                        <th>发布时间</th>
+                        <th>开始时间</th>
+                        <th>截止时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${result.getpTime()}">1,001</td>
+                        <td th:text="${result.getsTime()}">1,001</td>
+                        <td th:text="${result.getDeadline()}">1,001</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="sub-header">实验资源</h2>
+            <div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a th:href="@{'/download/'+${result.getFile()}}" methods="GET"
+                               th:text="${result.getFile()}"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="sub-header">我的提交</h2>
+            <div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>文件</td>
+                        <td>提交时间</td>
+                        <td>
+                            <form action="/s_submit" method="post" enctype="multipart/form-data">
+                                <p>选择文件: <input type="file" name="fileName"/></p>
+                                <p name="ID" th:text="${ID}" style="display: none"></p>
+                                <button style="width: 100px;height:25px;padding:3px;margin:0 auto; font-size: 14px"
+                                        class="btn btn-default" type="submit">提交
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${record.getSign()}">
+                        <td th:text="${record.getFILE()}">1,001</td>
+                        <td th:text="${record.getTrans()}">1,001</td>
+                    </tr>
+                    <tr th:unless="${record.getSign()}">
+                        <td>无</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script>window.jQuery || document.write('<script src="../bootstrap-3.3.7/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="../bootstrap-3.3.7/docs/dist/js/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../bootstrap-3.3.7/docs/assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../bootstrap-3.3.7/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

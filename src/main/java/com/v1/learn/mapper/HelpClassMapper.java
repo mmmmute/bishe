@@ -10,6 +10,9 @@ import java.util.List;
 @Component
 public interface HelpClassMapper {
 
-    @Select("select STUDENT_ID from HELP_CLASS where CLASS_ID = #{classId}")
+    @Select("select STUDENT_ID from CHOOSE where CLASS_ID = #{classId}")
     public List<Integer> listStudent(int classId);
+
+    @Select("select CLASS_ID from CHOOSE where STUDENT_ID = #{sId}")
+    public  List<Integer> findClassIdBysId(int sId);
 }

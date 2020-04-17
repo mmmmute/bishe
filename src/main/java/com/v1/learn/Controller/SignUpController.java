@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+
 @Controller
 public class SignUpController {
 
@@ -17,6 +19,8 @@ public class SignUpController {
 
     @Autowired
     private TeacherMapper teacherMapper;
+
+    private String path = "D:/test/";
 
     @PostMapping("/SignUp")
     public String test(@RequestParam(name = "type")String type,
@@ -35,6 +39,8 @@ public class SignUpController {
             int student_ID = Integer.parseInt(ID);
             Student student = new Student(student_ID,NAME,PASSWORD);
             studentMapper.insert(student);
+            File f = new File(path + student_ID);
+            f.mkdir();
         }
 
         return "SignYes";

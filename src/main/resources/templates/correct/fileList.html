@@ -1,0 +1,12 @@
+<h2 class="sub-header">文件列表</h2>
+<div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+        <tr th:each="el : ${fileList}">
+            <td>
+                <a th:href="@{'/downloadfile/'+${el}}" methods="GET" th:text="${el}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,22 @@
+<h2  xmlns:th="http://www.thymeleaf.org" class="sub-header">课程实验</h2>
+<p id="toController" style="display:none;">more</p>
+<div xmlns:th="http://www.thymeleaf.org" class="table-responsive">
+    <table class="table table-striped" id="table">
+        <thead>
+        <tr>
+            <th>实验名称</th>
+            <th >开始时间</th>
+            <th>截止时间</th>
+            <th>成绩</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exp : ${grades}">
+            <td th:text="${exp.getEXPERIMENT_NAME()}">1,001</td>
+            <td th:text="${exp.getSTART_TIME()}">1,001</td>
+            <td th:text="${exp.getDEADLINE()}">1,001</td>
+            <td th:text="${exp.getGRADE()}">1,001</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

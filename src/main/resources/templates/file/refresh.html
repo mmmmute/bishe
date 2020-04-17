@@ -1,0 +1,7 @@
+<div th:each="file:${filelist}">
+    <p>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span th:if="${file.indexOf('.')==-1}" class="glyphicon glyphicon-folder-close
+"></span> <span th:if="${file.indexOf('.')!=-1}" class="glyphicon glyphicon-file"></span> <a class="file" th:if="${file.indexOf('.')!=-1}" th:href="@{'/fileManager/'+${file}}" th:text="${file}" methods="get"></a>
+        <a th:if="${file.indexOf('.')==-1}" th:href="@{'/filedir/'+${file}}" th:text="${file}" methods="get"></a>
+    </p>
+</div>

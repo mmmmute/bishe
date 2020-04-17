@@ -18,4 +18,9 @@ public interface StudentMapper {
 
     @Select("select * from STUDENT where STUDENT_ID = #{account}")
     public Student searchStu(int account);
+
+    @Select("select NAME from STUDENT where STUDENT_ID = #{sId} ")
+    public String searchForName(int sId);
+
+
 }
