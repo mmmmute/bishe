@@ -55,8 +55,10 @@
     <form class="form-signin" action="/SignUp" method="post">
         <div class="input-group">
             <span class="input-group-addon" id="account">账户</span>
-            <input name="ID" id="inputAccount" type="text" class="form-control" placeholder="教师账号S+7位数  学生账号8位数字"
-                   aria-describedby="basic-addon1" required autofocus>
+            <input name="ID" id="inputAccount1" type="text" class="form-control" placeholder="教师账号S+7位数"
+                   aria-describedby="basic-addon1" pattern="S[0-9]{7}" oninvalid="setCustomValidity('请确认为内容为非空且格式正确')" required autofocus>
+            <input name="ID" id="inputAccount2" type="text" class="form-control" placeholder="学生账号8位数字"
+                   aria-describedby="basic-addon1" pattern="[0-9]{8}" oninvalid="setCustomValidity('请确认为内容为非空且格式正确')" style="display: none" required autofocus>
         </div>
 
         <div class="input-group">
@@ -73,7 +75,7 @@
 
         <h3>请选择您的类型</h3>
         <div class="form-group">
-            <select class="form-control" name="type">
+            <select class="form-control"  id="type_select" name="type">
                 <option>教师</option>
                 <option>学生</option>
             </select>
@@ -82,5 +84,18 @@
         <button style="width: 300px;margin:0 auto;" class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
     </form>
 </div>
+
+<script>
+    $('#type_select').change(function(){
+        if(this.options[this.selectedIndex].innerHTML == "学生"){
+            $('#inputAccount1').toggle();
+            $('#inputAccount2').toggle();
+        }
+        else{
+            $('#inputAccount1').toggle();
+            $('#inputAccount2').toggle();
+        }
+    });
+</script>
 </body>
 </html>

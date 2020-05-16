@@ -43,10 +43,15 @@ public class ClassController {
                               @RequestParam(name = "className")String name,
                               @RequestParam(name = "courseName")String courseName,
                               HttpSession session){
-        classMapper.insert(id,session.getAttribute("account").toString(),name,courseName);
-        File dest = new File(path + "/" + id);
-        dest.mkdir();
-        return "createSuccess";
+        try{
+            classMapper.insert(id,session.getAttribute("account").toString(),name,courseName);
+            File dest = new File(path + "/" + id);
+            dest.mkdir();
+            return "createSuccess";
+        }
+        catch (Exception e){
+            return "create/create_failed";
+        }
     }
 
     @PostMapping("/searchClass")

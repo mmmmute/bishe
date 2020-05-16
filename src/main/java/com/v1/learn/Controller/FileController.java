@@ -224,9 +224,9 @@ public class FileController {
         String rootpath = session.getAttribute("filepath").toString();
         for (String el:list
              ) {
-            System.out.println(el);
-            File file = new File(rootpath + "/" + el);
-            file.delete();
+            //File file = new File(rootpath + "/" + el);
+            //file.delete();
+            delete(rootpath + "/" + el);
         }
 
         File file = new File(rootpath);
@@ -234,6 +234,112 @@ public class FileController {
         model.addAttribute("filelist",filelist);
 
         return "file/refresh";
+    }
+
+    @GetMapping("/copy")
+    @ResponseBody
+    public String copy(HttpSession session,
+                       @RequestParam(value = "deletlist[]")List<String> list){
+        try{
+            String source_path = session.getAttribute("filepath").toString();
+            session.setAttribute("source_path",source_path);
+            session.setAttribute("copylist",list);
+            return "copy_suucess";
+        }
+        catch (Exception e){
+            return "failed";
+        }
+
+    }
+
+    @GetMapping("/pates")
+    public String pates(HttpSession session,Model model){
+        String target_path = session.getAttribute("filepath").toString();
+        String source_path = session.getAttribute("source_path").toString();
+        List<String> list = (List<String>) session.getAttribute("copylist");
+        for (String el:list
+             ) {
+            try{
+                File sourfile = new File(source_path+ "/" + el);
+                File destfile = new File(target_path + "/" + el);
+                sourfile.renameTo(destfile);
+                String [] filelist = new File(target_path).list();
+                model.addAttribute("filelist",filelist);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "file/refresh";
+    }
+
+    @GetMapping("/newdir")
+    public String newdir(@RequestParam(name = "newdir_name")String dir_name, HttpSession session, Model model){
+        String path = session.getAttribute("filepath").toString();
+        File file = new File(path + "/" + dir_name);
+        if(!file.exists()){
+            file.mkdir();
+            file = new File(path);
+            String [] filelist = file.list();
+            model.addAttribute("filelist",filelist);
+
+            String filepath = path;
+            String account = session.getAttribute("account").toString();
+            String str = filepath.replace("D:/test"+"/"+account,"");
+            String [] pathlist = str.split("/");
+
+            ArrayList<String> alist = new ArrayList<>();
+            int length = pathlist.length;
+            for (int i=1;i<length;i++){
+                alist.add(pathlist[i]);
+            }
+            model.addAttribute("pathlist",alist);
+            return "file/dirfile";
+        }
+        else{
+            file = new File(path);
+            String [] filelist = file.list();
+            model.addAttribute("filelist",filelist);
+
+            String filepath = path;
+            String account = session.getAttribute("account").toString();
+            String str = filepath.replace("D:/test"+"/"+account,"");
+            String [] pathlist = str.split("/");
+
+            ArrayList<String> alist = new ArrayList<>();
+            int length = pathlist.length;
+            for (int i=1;i<length;i++){
+                alist.add(pathlist[i]);
+            }
+            model.addAttribute("pathlist",alist);
+            return "file/newfile_fail";
+        }
+    }
+
+
+
+    public boolean delete(String path){
+        File file = new File(path);
+        if(!file.exists()){
+            return false;
+        }
+        if(file.isFile()){
+            return file.delete();
+        }
+        File[] files = file.listFiles();
+        for (File f : files) {
+            if(f.isFile()){
+                if(!f.delete()){
+                    System.out.println(f.getAbsolutePath()+" delete error!");
+                    return false;
+                }
+            }else{
+                if(!this.delete(f.getAbsolutePath())){
+                    return false;
+                }
+            }
+        }
+        return file.delete();
     }
 
 }

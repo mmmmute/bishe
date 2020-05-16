@@ -31,16 +31,26 @@ public class SignUpController {
         if(type.equals("教师")){
             System.out.println("是老师，应该创建教师数据");
             Teacher teacher = new Teacher(ID,PASSWORD,NAME);
-            teacherMapper.insert(teacher);
+            try{
+                teacherMapper.insert(teacher);
+            }
+            catch (Exception e){
+                return "SignUp/sign_failed";
+            }
 
         }
         else if(type.equals("学生")){
             System.out.println("创建学生数据");
             int student_ID = Integer.parseInt(ID);
             Student student = new Student(student_ID,NAME,PASSWORD);
-            studentMapper.insert(student);
-            File f = new File(path + student_ID);
-            f.mkdir();
+            try{
+                studentMapper.insert(student);
+                File f = new File(path + student_ID);
+                f.mkdir();
+            }
+            catch (Exception e){
+                return "SignUp/sign_failed";
+            }
         }
 
         return "SignYes";

@@ -13,4 +13,7 @@ public class IndexController {
 
     @PostMapping("/SignToIndex")
     public String SignToIndex() {return "index";}
+
+    @GetMapping("/SignToIndex")
+    public String ToIndex() {return "index";}
 }

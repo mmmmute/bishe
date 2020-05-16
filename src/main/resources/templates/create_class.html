@@ -72,14 +72,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="/SignToIndex">退出</a></li>
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
         </div>
     </div>
 </nav>
@@ -94,16 +88,9 @@
                 <li><a href="/publish_exp">发布实验</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
+                <li><a href="/setExp">设置实验时间</a></li>
+                <li><a href="checkExp">查看实验提交情况</a></li>
+                <li><a href="/correct">批改实验</a></li>
             </ul>
         </div>
 
@@ -113,7 +100,7 @@
                     <div class="input-group">
                         <span class="input-group-addon" id="classId">班级序列号</span>
                         <input name="classID" id="inputclassId" type="text" class="form-control" placeholder="6位数字"
-                               aria-describedby="basic-addon1" required autofocus>
+                               aria-describedby="basic-addon1" pattern="[0-9]{6}" oninvalid="setCustomValidity('请确认为内容为非空且格式正确')" required autofocus>
                     </div>
 
                     <div class="input-group">

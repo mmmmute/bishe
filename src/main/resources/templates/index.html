@@ -89,6 +89,18 @@
         });
     })
 
+
+    $('#type').change(function(){
+        if(this.options[this.selectedIndex].innerHTML == "学生"){
+            $('#inputAccount1').toggle();
+            $('#inputAccount2').toggle();
+        }
+        else{
+            $('#inputAccount1').toggle();
+            $('#inputAccount2').toggle();
+        }
+    });
+
 </script>
 
 <body>
@@ -97,8 +109,9 @@
 
     <form class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputAccount" class="sr-only">Email address</label>
-        <input name="account" type="text" id="inputAccount" class="form-control" placeholder="account" required autofocus>
+        <label for="inputAccount1" class="sr-only">Email address</label>
+        <input name="account" type="text" id="inputAccount1" pattern="S[0-9]{7}" oninvalid="setCustomValidity('请确认为内容为非空且格式正确')" class="form-control" placeholder="account" required autofocus>
+        <input name="account" type="text" id="inputAccount2" style="display: none" pattern="[0-9]{8}" oninvalid="setCustomValidity('请确认为内容为非空且格式正确')" class="form-control" placeholder="account" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input name="password" type="text" id="inputPassword" class="form-control" placeholder="Password" required>
         <div class="checkbox">

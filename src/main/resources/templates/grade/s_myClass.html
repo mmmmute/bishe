@@ -73,17 +73,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" th:text="${session.name}" href="#">教师名字</a>
+            <a class="navbar-brand" th:text="${session.name}" href="#">学生名字</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="/SignToIndex">退出</a></li>
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
+
+            <form class="navbar-form navbar-right" style="margin-right: 50px;" action="/searchClass" method="post">
+                <input type="text" class="form-control" name="class_id" placeholder="输入班级序列号搜索">
             </form>
         </div>
     </div>
@@ -99,20 +97,12 @@
                 <li><a href="/sMyExp">查看提交情况</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li><a href="s_grade">查看成绩</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
+                <li><a href="/s_grade">查看成绩</a></li>
+                <li><a href="/file">文件暂存</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="change">
-            <h2 class="sub-header">我管理的班级</h2>
+            <h2 class="sub-header">我的班级</h2>
             <div class="table-responsive">
                 <table class="table table-striped" id="table">
                     <thead>

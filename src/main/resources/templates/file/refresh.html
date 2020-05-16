@@ -1,7 +1,143 @@
-<div th:each="file:${filelist}">
+<div th:each="file:${filelist}" xmlns:th="http://www.thymeleaf.org">
     <p>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span th:if="${file.indexOf('.')==-1}" class="glyphicon glyphicon-folder-close
+        &nbsp;&nbsp;&nbsp;&nbsp;<input style="display: inline" type="checkbox" class="checkbox"
+                                       th:value="${file}"><span th:if="${file.indexOf('.')==-1}" class="glyphicon glyphicon-folder-close
 "></span> <span th:if="${file.indexOf('.')!=-1}" class="glyphicon glyphicon-file"></span> <a class="file" th:if="${file.indexOf('.')!=-1}" th:href="@{'/fileManager/'+${file}}" th:text="${file}" methods="get"></a>
         <a th:if="${file.indexOf('.')==-1}" th:href="@{'/filedir/'+${file}}" th:text="${file}" methods="get"></a>
     </p>
 </div>
+
+
+<script>
+    $('#newdir').on('click', function(){
+        layer.open({
+            type: 1,
+            area: ['600px', '300px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '\<\div style="padding:20px;height:100%;"><form action="/newdir"><h3 style="height:30%;margin-bottom:30px;">请输入文件夹名字：</h3><div style:"padding:auto;height:20%;margin:auto;"><input type="text" name="newdir_name" required="required"/></div><div style="text-align:center;margin:5%;"><button style="margin:auto;" type="submit">确定</button></form></div>\<\/div>'
+        });
+    });
+
+
+    $(function(){
+        let active = localStorage.getItem("pates_active");
+        if(active){
+            $('#paste').attr('onclick','F_Paste_dialog()');
+        }
+    });
+
+
+    function F_Copy_dialog() {
+        let arry = new Array();
+        $('.checkbox').each(function(){
+            if($(this).prop('checked')){
+                arry.push($(this).val());
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: "/copy",
+            cache: false,
+            async: true,
+            data: {"deletlist": arry},
+            success: function (data) {
+                if(data=="copy_suucess"){
+                    alert("已复制到粘贴板");
+                    localStorage.setItem("pates_active",true);
+                    $('#paste').attr('onclick','F_Paste_dialog()');
+                }
+            },
+            error: function (data) {
+                alert("错误！");
+            }
+        });
+    }
+
+    function F_Paste_dialog() {
+        $.ajax({
+            type: "get",
+            url: "/pates",
+            cache: false,
+            async: true,
+            success: function (data) {
+                $('#refresh').html(data);
+            },
+            error: function (data) {
+                alert("错误！");
+            }
+        });
+    }
+
+
+    function F_Open_dialog() {
+        document.getElementById("btn_file").click();
+    }
+
+    function F_SUBMIT() {
+        document.getElementById("file_sub").click();
+    }
+
+    function refresh() {
+        document.getElementById("help").click();
+    }
+
+    function F_Delet_dialog(){
+        let arry = new Array();
+        $('.checkbox').each(function(){
+            if($(this).prop('checked')){
+                arry.push($(this).val());
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "/delet_file",
+            cache: false,
+            async: true,
+            data: {
+                "deletlist": arry
+            },
+            success: function (data) {
+                $("#refresh").html(data);
+            },
+            error: function (data) {
+                alert("错误！");
+            }
+        });
+    }
+
+
+
+    $(document).ready(function () {
+        $('.path').on("click", function () {
+            let click = $(this).text();
+            //
+            let s = $(this).parent().prevAll(".path_parent").children("a.path");
+            let str = "";
+            let arry = new Array();
+            $.each(s, function (i) {
+                arry.push($(this).text());
+            });
+
+            while (arry.length > 0) {
+                str = str + arry.pop();
+                str = str + "/";
+            }
+            str = str + click;
+            $.ajax({
+                type: "post",
+                url: "/change_path",
+                cache: false,
+                async: true,
+                data: {
+                    "prePath": str
+                },
+                success: function (data) {
+                    $("#file_refresh").html(data);
+                },
+                error: function (data) {
+                    alert("错误！");
+                }
+            });
+        });
+    });
+</script>

@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.css">
     <script src="../js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <link rel="icon" href="../bootstrap-3.3.7/docs/favicon.ico">
 
@@ -55,11 +56,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="/SignToIndex">退出</a></li>
             </ul>
+
             <form class="navbar-form navbar-right" action="/searchClass" method="post">
                 <input type="text" class="form-control" name="class_id" placeholder="输入班级序列号搜索">
             </form>
@@ -78,15 +77,7 @@
             </ul>
             <ul class="nav nav-sidebar">
                 <li><a href="/s_grade">查看成绩</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
+                <li><a href="/file">文件暂存</a></li>
             </ul>
         </div>
         <div id="file_refresh" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -102,7 +93,7 @@
             <nav class="navbar navbar-default" style="width: 85%;">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand path" href="#">根目录</a>
+                        <a class="navbar-brand path" href="/file">根目录</a>
                         <div class="path_parent" th:each="el:${pathlist}" style="display: inline-block">
                             <span class="navbar-brand">>></span><a style="display: inline-block"
                                                                    class="navbar-brand path" href="#"
@@ -120,6 +111,20 @@
                               onclick="F_Delet_dialog()"></span>
                     </div>
 
+                    <div style="float: right;margin-right: 15px;" class="navbar-header">
+                        <span class="glyphicon glyphicon-copy navbar-brand" type="button"
+                              onclick="F_Copy_dialog()"></span>
+                    </div>
+
+                    <div style="float: right;margin-right: 15px;" class="navbar-header">
+                        <span id="paste" disabled="disabled" class="glyphicon glyphicon-paste navbar-brand" type="button"
+                              onclick="null"></span>
+                    </div>
+
+                    <div style="float: right;margin-right: 15px;" class="navbar-header">
+                        <span id="newdir" class="glyphicon glyphicon-plus navbar-brand" type="button"
+                        ></span>
+                    </div>
                 </div>
             </nav>
 
@@ -146,6 +151,66 @@
 </div>
 
 <script>
+    $('#newdir').on('click', function(){
+        layer.open({
+            type: 1,
+            area: ['600px', '300px'],
+            shadeClose: true, //点击遮罩关闭
+            content: '\<\div style="padding:20px;height:100%;"><form action="/newdir"><h3 style="height:30%;margin-bottom:30px;">请输入文件夹名字：</h3><div style:"padding:auto;height:20%;margin:auto;"><input type="text" name="newdir_name" required="required"/></div><div style="text-align:center;margin:5%;"><button style="margin:auto;" type="submit">确定</button></form></div>\<\/div>'
+        });
+    });
+
+
+    $(function(){
+        let active = localStorage.getItem("pates_active");
+        if(active){
+            $('#paste').attr('onclick','F_Paste_dialog()');
+        }
+    });
+
+
+    function F_Copy_dialog() {
+        let arry = new Array();
+        $('.checkbox').each(function(){
+            if($(this).prop('checked')){
+                arry.push($(this).val());
+            }
+        });
+        $.ajax({
+            type: "get",
+            url: "/copy",
+            cache: false,
+            async: true,
+            data: {"deletlist": arry},
+            success: function (data) {
+                if(data=="copy_suucess"){
+                    alert("已复制到粘贴板");
+                    localStorage.setItem("pates_active",true);
+                    $('#paste').attr('onclick','F_Paste_dialog()');
+                }
+            },
+            error: function (data) {
+                alert("错误！");
+            }
+        });
+    }
+
+    function F_Paste_dialog() {
+        $.ajax({
+            type: "get",
+            url: "/pates",
+            cache: false,
+            async: true,
+            success: function (data) {
+                $('#refresh').html(data);
+            },
+            error: function (data) {
+                alert("错误！");
+            }
+        });
+    }
+
+
     function F_Open_dialog() {
         document.getElementById("btn_file").click();
     }
